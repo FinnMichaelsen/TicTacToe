@@ -1,7 +1,7 @@
 let fields = [
     null,
-    'circle',
-    'cross',
+    null,
+    null,
     null,
     null,
     null,
@@ -9,6 +9,8 @@ let fields = [
     null,
     null,
 ];
+
+let currentPlayer = 'circle';
 
 function init() {
 render();
@@ -31,7 +33,7 @@ function render() {
             } else if (fields[index] === 'cross') {
                 symbol = generateAnimatedCrossSVG();
             } 
-            tableHtml += `<td>${symbol}</td>`;
+            tableHtml += `<td onclick="handleClick(this, ${index})">${symbol}</td>`;
                 
             
         }
@@ -48,7 +50,7 @@ function generateAnimatedCircleSVG() {
     const svgCode = `
     <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70">
       <circle cx="35" cy="35" r="30" fill="none" stroke="#00B0EF" stroke-width="5">
-        <animate attributeName="stroke-dasharray" from="0 188" to="188 188" dur="2s" fill="freeze" />
+        <animate attributeName="stroke-dasharray" from="0 188" to="188 188" dur="0.5s" fill="freeze" />
       </circle>
     </svg>
   `;
@@ -60,14 +62,24 @@ function generateAnimatedCircleSVG() {
     const svgCode = `
     <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70">
       <line x1="10" y1="10" x2="60" y2="60" stroke="#ffc000" stroke-width="5">
-        <animate attributeName="x2" from="10" to="60" dur="2s" fill="freeze" />
-        <animate attributeName="y2" from="10" to="60" dur="2s" fill="freeze" />
+        <animate attributeName="x2" from="10" to="60" dur="0.5s" fill="freeze" />
+        <animate attributeName="y2" from="10" to="60" dur="0.5s" fill="freeze" />
       </line>
       <line x1="10" y1="60" x2="60" y2="10" stroke="#ffc000" stroke-width="5">
-        <animate attributeName="x2" from="10" to="60" dur="2s" fill="freeze" />
-        <animate attributeName="y2" from="60" to="10" dur="2s" fill="freeze" />
+        <animate attributeName="x2" from="10" to="60" dur="0.5s" fill="freeze" />
+        <animate attributeName="y2" from="60" to="10" dur="0.5s" fill="freeze" />
       </line>
     </svg>
   `;
     return svgCode;
+  }
+
+  //*css*/`
+  function handleClick(cell, index) {
+    if (fields[index] === null) {
+        fields[index] = currentPlayer;
+        cell.innerHTML = currentPlayer === 'circle' ? generateAnimatedCircleSVG() : generateAnimatedCrossSVG();
+        cell.onclick = null;
+        currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
+    }
   }
